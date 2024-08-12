@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .booking-details {
+            text-align: center;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Booking Confirmation</h1>
+        <div class="booking-details" id="booking-details">
+            <p>Hotel Name: <span id="hotel-name"></span></p>
+            <p>Check-in Date: <span id="checkin-date"></span></p>
+            <p>Check-out Date: <span id="checkout-date"></span></p>
+            <p>Price: <span id="booking-price"></span></p>
+        </div>
+        <a href="hotel.html" class="btn-back">Back to Hotels</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const bookingDetails = document.getElementById('booking-details');
+            
+            // Example booking data
+            const booking = {
+                hotelName: "Hotel One",
+                checkinDate: "2024-08-15",
+                checkoutDate: "2024-08-20",
+                price: "$500"
+            };
+            
+            document.getElementById('hotel-name').textContent = booking.hotelName;
+            document.getElementById('checkin-date').textContent = booking.checkinDate;
+            document.getElementById('checkout-date').textContent = booking.checkoutDate;
+            document.getElementById('booking-price').textContent = booking.price;
+        });
+    </script>
+</body>
+</html>
