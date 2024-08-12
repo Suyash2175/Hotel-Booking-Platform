@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Details</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #hotel-details {
+            text-align: center;
+        }
+
+        #hotel-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hotel Details</h1>
+        <div id="hotel-details">
+            <img id="hotel-image" alt="Hotel Image">
+            <h2 id="hotel-name"></h2>
+            <p id="hotel-location"></p>
+            <p id="hotel-price"></p>
+            <p id="hotel-ratings"></p>
+            <p id="hotel-amenities"></p>
+            <p id="hotel-description"></p>
+        </div>
+        <a href="hotel.html" class="btn-back">Back to Hotels</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hotelDetails = document.getElementById('hotel-details');
+            
+            // Example hotel data
+            const hotel = {
+                name: "Hotel One",
+                location: "City A",
+                price: "$100",
+                image: "path/to/image.jpg",
+                ratings: "4.5",
+                amenities: "Free WiFi, Pool",
+                description: "A nice hotel in City A."
+            };
+            
+            document.getElementById('hotel-name').textContent = hotel.name;
+            document.getElementById('hotel-location').textContent = hotel.location;
+            document.getElementById('hotel-price').textContent = hotel.price;
+            document.getElementById('hotel-ratings').textContent = hotel.ratings + " stars";
+            document.getElementById('hotel-amenities').textContent = hotel.amenities;
+            document.getElementById('hotel-description').textContent = hotel.description;
+            document.getElementById('hotel-image').src = hotel.image;
+        });
+    </script>
+</body>
+</html>
