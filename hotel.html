@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotels List</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .hotel-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .hotel-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .hotel-card:hover {
+            transform: scale(1.05);
+        }
+
+        .hotel-content {
+            padding: 20px;
+        }
+
+        .hotel-name {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .hotel-rating,
+        .hotel-price {
+            font-size: 1em;
+            color: #007bff;
+        }
+
+        .btn-book-now {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-book-now:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .pagination button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .pagination button:disabled {
+            background-color: #c0c0c0;
+            cursor: not-allowed;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hotels List</h1>
+        <div class="hotel-container" id="hotel-container">
+            <!-- Hotel cards will be dynamically inserted here -->
+        </div>
+        <div id="error-message" class="error-message"></div>
+        <div class="pagination">
+            <button id="prev-button" disabled>Previous</button>
+            <button id="next-button">Next</button>
+        </div>
+    </div>
+    <script>
+        const hotelsPerPage = 10;
+        let currentPage = 1;
+        let currentHotelIndex = 0;
+
+        async function fetchHotels(page) {
+            try {
+                console.log(`Fetching hotels for page ${page}`);
+                const response = await fetch(`http://localhost:4000/hotels?page=${page}&limit=${hotelsPerPage}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                const data = await response.json();
+                console.log('Fetched data:', data);
+                return data;
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Error loading hotels. Please try again later.';
+                return [];
+            }
+        }
+
+        async function renderHotels(page) {
+            const hotels = await fetchHotels(page);
+            const hotelContainer = document.getElementById('hotel-container');
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+
+            hotelContainer.innerHTML = '';
+
+            if (Array.isArray(hotels) && hotels.length > 0) {
+                currentHotelIndex = 0;
+                hotels.forEach(hotel => {
+                    const hotelCard = document.createElement('div');
+                    hotelCard.className = 'hotel-card';
+
+                    hotelCard.innerHTML = `
+                        <div class="hotel-content">
+                            <h2 class="hotel-name">${hotel.name}</h2>
+                            <p class="hotel-rating">Rating: ${hotel.rating}</p>
+                            <p class="hotel-price">Price: ₹${hotel.price}</p>
+                            <a href="hoteldetail.html?id=${hotel.id}" class="btn-book-now">View Details</a>
+                        </div>
+                    `;
+
+                    hotelContainer.appendChild(hotelCard);
+                });
+
+                prevButton.disabled = page <= 1;
+                nextButton.disabled = hotels.length < hotelsPerPage;
+
+                // Set the first hotel ID to the "Next" button if available
+                if (hotels.length > 0) {
+                    nextButton.onclick = () => {
+                        window.location.href = `hoteldetail.html?id=${hotels[currentHotelIndex + 1]?.id || hotels[hotels.length - 1].id}`;
+                    };
+                }
+            } else {
+                hotelContainer.innerHTML = '<p>No hotels available.</p>';
+                prevButton.disabled = true;
+                nextButton.disabled = true;
+            }
+        }
+
+        function setupPaginationButtons() {
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderHotels(currentPage);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                currentPage++;
+                renderHotels(currentPage);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupPaginationButtons();
+            renderHotels(currentPage);
+        });
+    </script>
+</body>
+</html>
